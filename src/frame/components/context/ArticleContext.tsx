@@ -3,16 +3,6 @@ import { createContext, useContext } from 'react'
 import type { JSX } from 'react'
 import type { JourneyContext } from '@/journeys/lib/journey-path-resolver'
 
-export type LearningTrack = {
-  trackTitle: string
-  trackName: string
-  trackProduct: string
-  prevGuide?: { href: string; title: string }
-  nextGuide?: { href: string; title: string }
-  numberOfGuides: number
-  currentGuideIndex: number
-}
-
 export type MiniTocItem = {
   platform?: string
   contents: {
@@ -34,14 +24,13 @@ export type ArticleContextT = {
   defaultPlatform?: string
   defaultTool?: string
   product?: string
-  productVideoUrl?: string
-  currentLearningTrack?: LearningTrack
   currentJourneyTrack?: JourneyContext
   detectedPlatforms: Array<string>
   detectedTools: Array<string>
   allTools: Record<string, string>
   supportPortalVaIframeProps: SupportPortalVaIframeProps
   currentLayout?: string
+  currentPath: string
 }
 
 export const ArticleContext = createContext<ArticleContextT | null>(null)
@@ -99,13 +88,12 @@ export const getArticleContextFromRequest = (req: any): ArticleContextT => {
     defaultPlatform: page.defaultPlatform || '',
     defaultTool: page.defaultTool || '',
     product: page.product || '',
-    productVideoUrl: page.product_video || '',
-    currentLearningTrack: req.context.currentLearningTrack,
     currentJourneyTrack: req.context.currentJourneyTrack,
     detectedPlatforms: page.detectedPlatforms || [],
     detectedTools: page.detectedTools || [],
     allTools: page.allToolsParsed || [], // this is set at the page level, see lib/page.ts
     supportPortalVaIframeProps,
     currentLayout: req.context.currentLayoutName,
+    currentPath: req.context.currentPath || '',
   }
 }
